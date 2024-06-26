@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Video</title>
+    <script>
+        let startTime;
+
+        function startTimer() {
+            startTime = new Date();
+        }
+
+        function redirect() {
+            const endTime = new Date();
+            const watchTime = (endTime - startTime) / 1000; // Calculate watch time in seconds
+            const minutesWatched = Math.floor(watchTime / 60); // Convert seconds to minutes
+
+            // Send watch time to server
+            fetch('/track', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: 'USER_ID', // Replace with user ID when generating the link
+                    minutesWatched: minutesWatched
+                })
+            });
+
+            // Redirect to the YouTube video
+            window.location.href = 'https://www.youtube.com/watch?v=VIDEO_ID'; // Replace with your YouTube video ID
+        }
+    </script>
+</head>
+<body onload="startTimer()">
+    <h1>Redirecting to video...</h1>
+    <p>If you are not redirected in 5 seconds, click <a href="https://www.youtube.com/watch?v=VIDEO_ID" onclick="redirect()">here</a>.</p>
+    <script>
+        setTimeout(redirect, 5000); // Redirect after 5 seconds
+    </script>
+</body>
+</html>
